@@ -183,6 +183,173 @@ void createTriangleAsmProgs (SourceCollections& dst)
 		"		OpFunctionEnd\n";
 }
 
+void createControlFlowBugAsmProgs (SourceCollections& dst)
+{
+	dst.spirvAsmSources.add("vert1") <<
+									 "OpCapability Shader\n"
+									 "%1 = OpExtInstImport \"GLSL.std.450\"\n"
+									 "OpMemoryModel Logical GLSL450\n"
+									 "OpEntryPoint Vertex %4 \"main\" %10 %14\n"
+									 "OpMemberDecorate %8 0 BuiltIn Position\n"
+									 "OpMemberDecorate %8 1 BuiltIn PointSize\n"
+									 "OpDecorate %8 Block\n"
+									 "OpDecorate %14 Location 0\n"
+									 "%2 = OpTypeVoid\n"
+									 "%3 = OpTypeFunction %2\n"
+									 "%6 = OpTypeFloat 32\n"
+									 "%7 = OpTypeVector %6 4\n"
+									 "%8 = OpTypeStruct %7 %6\n"
+									 "%9 = OpTypePointer Output %8\n"
+									 "%10 = OpVariable %9 Output\n"
+									 "%11 = OpTypeInt 32 1\n"
+									 "%12 = OpConstant %11 0\n"
+									 "%13 = OpTypePointer Input %7\n"
+									 "%14 = OpVariable %13 Input\n"
+									 "%16 = OpTypePointer Output %7\n"
+									 "%4 = OpFunction %2 None %3\n"
+									 "%5 = OpLabel\n"
+									 "%15 = OpLoad %7 %14\n"
+									 "%17 = OpAccessChain %16 %10 %12\n"
+									 "OpStore %17 %15\n"
+									 "OpReturn\n"
+									 "OpFunctionEnd\n";
+	dst.spirvAsmSources.add("frag1") <<
+									 "OpCapability Shader\n"
+									 "%1 = OpExtInstImport \"GLSL.std.450\"\n"
+									 "OpMemoryModel Logical GLSL450\n"
+									 "OpEntryPoint Fragment %4 \"main\"\n"
+									 "OpExecutionMode %4 OriginUpperLeft\n"
+									 "%2 = OpTypeVoid\n"
+									 "%3 = OpTypeFunction %2\n"
+									 "%6 = OpTypeFloat 32\n"
+									 "%7 = OpTypePointer Function %6\n"
+									 "%8 = OpTypeVector %6 4\n"
+									 "%9 = OpTypeMatrix %8 4\n"
+									 "%10 = OpTypeFunction %9 %7 %7 %7 %7\n"
+									 "%17 = OpTypeBool\n"
+									 "%18 = OpConstantTrue %17\n"
+									 "%21 = OpConstant %6 1\n"
+									 "%22 = OpConstant %6 0\n"
+									 "%23 = OpConstantComposite %8 %21 %22 %22 %22\n"
+									 "%24 = OpConstantComposite %8 %22 %21 %22 %22\n"
+									 "%25 = OpConstantComposite %8 %22 %22 %21 %22\n"
+									 "%26 = OpConstantComposite %8 %22 %22 %22 %21\n"
+									 "%27 = OpConstantComposite %9 %23 %24 %25 %26\n"
+									 "%31 = OpTypePointer Function %9\n"
+									 "%33 = OpConstant %6 3\n"
+									 "%34 = OpConstant %6 9\n"
+									 "%4 = OpFunction %2 None %3\n"
+									 "%5 = OpLabel\n"
+									 "%32 = OpVariable %31 Function\n"
+									 "%35 = OpVariable %7 Function\n"
+									 "%36 = OpVariable %7 Function\n"
+									 "%37 = OpVariable %7 Function\n"
+									 "%38 = OpVariable %7 Function\n"
+									 "OpStore %35 %21\n"
+									 "OpStore %36 %21\n"
+									 "OpStore %37 %33\n"
+									 "OpStore %38 %34\n"
+									 "%39 = OpFunctionCall %9 %15 %35 %36 %37 %38\n"
+									 "OpStore %32 %39\n"
+									 "OpReturn\n"
+									 "OpFunctionEnd\n"
+									 "%15 = OpFunction %9 None %10\n"
+									 "%11 = OpFunctionParameter %7\n"
+									 "%12 = OpFunctionParameter %7\n"
+									 "%13 = OpFunctionParameter %7\n"
+									 "%14 = OpFunctionParameter %7\n"
+									 "%16 = OpLabel\n"
+									 "OpSelectionMerge %20 None\n"
+									 "OpBranchConditional %18 %19 %20\n"
+									 "%19 = OpLabel\n"
+									 "OpReturnValue %27\n"
+									 "%20 = OpLabel\n"
+									 "OpReturnValue %27\n"
+									 "OpFunctionEnd\n";
+
+	dst.spirvAsmSources.add("vert2") <<
+									 "OpCapability Shader\n"
+									 "%1 = OpExtInstImport \"GLSL.std.450\"\n"
+									 "OpMemoryModel Logical GLSL450\n"
+									 "OpEntryPoint Vertex %4 \"main\" %10 %14\n"
+									 "OpMemberDecorate %8 0 BuiltIn Position\n"
+									 "OpMemberDecorate %8 1 BuiltIn PointSize\n"
+									 "OpDecorate %8 Block\n"
+									 "OpDecorate %14 Location 0\n"
+									 "%2 = OpTypeVoid\n"
+									 "%3 = OpTypeFunction %2\n"
+									 "%6 = OpTypeFloat 32\n"
+									 "%7 = OpTypeVector %6 4\n"
+									 "%8 = OpTypeStruct %7 %6\n"
+									 "%9 = OpTypePointer Output %8\n"
+									 "%10 = OpVariable %9 Output\n"
+									 "%11 = OpTypeInt 32 1\n"
+									 "%12 = OpConstant %11 0\n"
+									 "%13 = OpTypePointer Input %7\n"
+									 "%14 = OpVariable %13 Input\n"
+									 "%16 = OpTypePointer Output %7\n"
+									 "%4 = OpFunction %2 None %3\n"
+									 "%5 = OpLabel\n"
+									 "%15 = OpLoad %7 %14\n"
+									 "%17 = OpAccessChain %16 %10 %12\n"
+									 "OpStore %17 %15\n"
+									 "OpReturn\n"
+									 "OpFunctionEnd\n";
+	dst.spirvAsmSources.add("frag2") <<
+									 "OpCapability Shader\n"
+									 "%1 = OpExtInstImport \"GLSL.std.450\"\n"
+									 "OpMemoryModel Logical GLSL450\n"
+									 "OpEntryPoint Fragment %4 \"main\"\n"
+									 "OpExecutionMode %4 OriginUpperLeft\n"
+									 "%2 = OpTypeVoid\n"
+									 "%3 = OpTypeFunction %2\n"
+									 "%6 = OpTypeFloat 32\n"
+									 "%7 = OpTypePointer Function %6\n"
+									 "%8 = OpTypeVector %6 4\n"
+									 "%9 = OpTypeMatrix %8 4\n"
+									 "%10 = OpTypeFunction %9 %7 %7 %7 %7\n"
+									 "%17 = OpTypeBool\n"
+									 "%18 = OpConstantTrue %17\n"
+									 "%21 = OpConstant %6 1\n"
+									 "%22 = OpConstant %6 0\n"
+									 "%23 = OpConstantComposite %8 %21 %22 %22 %22\n"
+									 "%24 = OpConstantComposite %8 %22 %21 %22 %22\n"
+									 "%25 = OpConstantComposite %8 %22 %22 %21 %22\n"
+									 "%26 = OpConstantComposite %8 %22 %22 %22 %21\n"
+									 "%27 = OpConstantComposite %9 %23 %24 %25 %26\n"
+									 "%31 = OpTypePointer Function %9\n"
+									 "%33 = OpConstant %6 3\n"
+									 "%34 = OpConstant %6 9\n"
+									 "%4 = OpFunction %2 None %3\n"
+									 "%5 = OpLabel\n"
+									 "%32 = OpVariable %31 Function\n"
+									 "%35 = OpVariable %7 Function\n"
+									 "%36 = OpVariable %7 Function\n"
+									 "%37 = OpVariable %7 Function\n"
+									 "%38 = OpVariable %7 Function\n"
+									 "OpStore %35 %21\n"
+									 "OpStore %36 %21\n"
+									 "OpStore %37 %33\n"
+									 "OpStore %38 %34\n"
+									 "%39 = OpFunctionCall %9 %15 %35 %36 %37 %38\n"
+									 "OpStore %32 %39\n"
+									 "OpReturn\n"
+									 "OpFunctionEnd\n"
+									 "%15 = OpFunction %9 None %10\n"
+									 "%11 = OpFunctionParameter %7\n"
+									 "%12 = OpFunctionParameter %7\n"
+									 "%13 = OpFunctionParameter %7\n"
+									 "%14 = OpFunctionParameter %7\n"
+									 "%16 = OpLabel\n"
+									 "OpSelectionMerge %20 None\n"
+									 "OpBranchConditional %18 %19 %20\n"
+									 "%19 = OpLabel\n"
+									 "OpReturnValue %27\n"
+									 "%20 = OpLabel\n"
+									 "OpReturnValue %27\n"
+									 "OpFunctionEnd\n";
+}
+
 void createTriangleProgs (SourceCollections& dst)
 {
 	dst.glslSources.add("vert") << glu::VertexSource(
@@ -1048,6 +1215,393 @@ tcu::TestStatus renderTriangleUnusedResolveAttachmentTest (Context& context)
 	return tcu::TestStatus::pass("Rendering succeeded");
 }
 
+void recordCommandBufferForRenderShaderPair (
+    const DeviceInterface&					vk,
+    const deUint32							queueFamilyIndex,
+    const Unique<VkImage>&                  image,
+    const Unique<VkRenderPass>&				renderPass,
+    const tcu::IVec2&						renderSize,
+    const Unique<VkFramebuffer>&			framebuffer,
+    const tcu::Vec4&						clearColor,
+    const Unique<VkPipeline>&				pipeline,
+    const Unique<VkBuffer>&					vertexBuffer,
+    const Unique<VkBuffer>&					readImageBufferReference,
+    const VkDeviceSize						imageSizeBytes,
+    const Unique<VkCommandBuffer>&			cmdBuf
+)
+{
+  // Record commands
+  beginCommandBuffer(vk, *cmdBuf);
+
+  {
+    const VkMemoryBarrier		vertFlushBarrier	=
+        {
+            VK_STRUCTURE_TYPE_MEMORY_BARRIER,			// sType
+            DE_NULL,									// pNext
+            VK_ACCESS_HOST_WRITE_BIT,					// srcAccessMask
+            VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,		// dstAccessMask
+        };
+    const VkImageMemoryBarrier	colorAttBarrier		=
+        {
+            VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,		// sType
+            DE_NULL,									// pNext
+            0u,											// srcAccessMask
+            (VK_ACCESS_COLOR_ATTACHMENT_READ_BIT|
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT),		// dstAccessMask
+            VK_IMAGE_LAYOUT_UNDEFINED,					// oldLayout
+            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,	// newLayout
+            queueFamilyIndex,							// srcQueueFamilyIndex
+            queueFamilyIndex,							// dstQueueFamilyIndex
+            *image,										// image
+            {
+                VK_IMAGE_ASPECT_COLOR_BIT,					// aspectMask
+                0u,											// baseMipLevel
+                1u,											// levelCount
+                0u,											// baseArrayLayer
+                1u,											// layerCount
+            }											// subresourceRange
+        };
+    vk.cmdPipelineBarrier(*cmdBuf, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, (VkDependencyFlags)0, 1, &vertFlushBarrier, 0, (const VkBufferMemoryBarrier*)DE_NULL, 1, &colorAttBarrier);
+  }
+
+  beginRenderPass(vk, *cmdBuf, *renderPass, *framebuffer, makeRect2D(0, 0, renderSize.x(), renderSize.y()), clearColor);
+
+  vk.cmdBindPipeline(*cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, *pipeline);
+  {
+    const VkDeviceSize bindingOffset = 0;
+    vk.cmdBindVertexBuffers(*cmdBuf, 0u, 1u, &vertexBuffer.get(), &bindingOffset);
+  }
+  vk.cmdDraw(*cmdBuf, 6u, 1u, 0u, 0u);
+  endRenderPass(vk, *cmdBuf);
+
+  {
+    const VkImageMemoryBarrier	renderFinishBarrier	=
+        {
+            VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,		// sType
+            DE_NULL,									// pNext
+            VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,		// outputMask
+            VK_ACCESS_TRANSFER_READ_BIT,				// inputMask
+            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,	// oldLayout
+            VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,		// newLayout
+            queueFamilyIndex,							// srcQueueFamilyIndex
+            queueFamilyIndex,							// dstQueueFamilyIndex
+            *image,										// image
+            {
+                VK_IMAGE_ASPECT_COLOR_BIT,					// aspectMask
+                0u,											// baseMipLevel
+                1u,											// mipLevels
+                0u,											// baseArraySlice
+                1u,											// arraySize
+            }											// subresourceRange
+        };
+    vk.cmdPipelineBarrier(*cmdBuf, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, (VkDependencyFlags)0, 0, (const VkMemoryBarrier*)DE_NULL, 0, (const VkBufferMemoryBarrier*)DE_NULL, 1, &renderFinishBarrier);
+  }
+
+  {
+    const VkBufferImageCopy	copyParams	=
+        {
+            (VkDeviceSize)0u,						// bufferOffset
+            (deUint32)renderSize.x(),				// bufferRowLength
+            (deUint32)renderSize.y(),				// bufferImageHeight
+            {
+                VK_IMAGE_ASPECT_COLOR_BIT,				// aspectMask
+                0u,										// mipLevel
+                0u,										// baseArrayLayer
+                1u,										// layerCount
+            },										// imageSubresource
+            { 0u, 0u, 0u },							// imageOffset
+            {
+                (deUint32)renderSize.x(),
+                (deUint32)renderSize.y(),
+                1u
+            }										// imageExtent
+        };
+    vk.cmdCopyImageToBuffer(*cmdBuf, *image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, *readImageBufferReference, 1u, &copyParams);
+  }
+
+  {
+    const VkBufferMemoryBarrier	copyFinishBarrier	=
+        {
+            VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,	// sType
+            DE_NULL,									// pNext
+            VK_ACCESS_TRANSFER_WRITE_BIT,				// srcAccessMask
+            VK_ACCESS_HOST_READ_BIT,					// dstAccessMask
+            queueFamilyIndex,							// srcQueueFamilyIndex
+            queueFamilyIndex,							// dstQueueFamilyIndex
+            *readImageBufferReference,							// buffer
+            0u,											// offset
+            imageSizeBytes								// size
+        };
+    vk.cmdPipelineBarrier(*cmdBuf, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_HOST_BIT, (VkDependencyFlags)0, 0, (const VkMemoryBarrier*)DE_NULL, 1, &copyFinishBarrier, 0, (const VkImageMemoryBarrier*)DE_NULL);
+  }
+
+  endCommandBuffer(vk, *cmdBuf);
+}
+
+tcu::TestStatus renderShaderPair (Context& context)
+{
+	const VkDevice							vkDevice				= context.getDevice();
+	const DeviceInterface&					vk						= context.getDeviceInterface();
+	const VkQueue							queue					= context.getUniversalQueue();
+	const deUint32							queueFamilyIndex		= context.getUniversalQueueFamilyIndex();
+	SimpleAllocator							memAlloc				(vk, vkDevice, getPhysicalDeviceMemoryProperties(context.getInstanceInterface(), context.getPhysicalDevice()));
+	const tcu::IVec2						renderSize				(256, 256);
+	const VkFormat							colorFormat				= VK_FORMAT_R8G8B8A8_UNORM;
+	const tcu::Vec4							clearColor				(0.0f, 0.0f, 0.0f, 0.0f);
+
+	const tcu::Vec4							vertices[]				=
+			{
+					tcu::Vec4(-1.0f, -1.0f, 0.0f, 1.0f),
+					tcu::Vec4(-1.0f, +1.0f, 0.0f, 1.0f),
+					tcu::Vec4(+1.0f, +1.0f, 0.0f, 1.0f),
+
+					tcu::Vec4(+1.0f, +1.0f, 0.0f, 1.0f),
+					tcu::Vec4(+1.0f, -1.0f, 0.0f, 1.0f),
+					tcu::Vec4(-1.0f, -1.0f, 0.0f, 1.0f)
+			};
+
+	const VkBufferCreateInfo				vertexBufferParams		=
+			{
+					VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,	// sType
+					DE_NULL,								// pNext
+					0u,										// flags
+					(VkDeviceSize)sizeof(vertices),			// size
+					VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,		// usage
+					VK_SHARING_MODE_EXCLUSIVE,				// sharingMode
+					1u,										// queueFamilyIndexCount
+					&queueFamilyIndex,						// pQueueFamilyIndices
+			};
+	const Unique<VkBuffer>					vertexBuffer			(createBuffer(vk, vkDevice, &vertexBufferParams));
+	const UniquePtr<Allocation>				vertexBufferMemory		(memAlloc.allocate(getBufferMemoryRequirements(vk, vkDevice, *vertexBuffer), MemoryRequirement::HostVisible));
+
+	VK_CHECK(vk.bindBufferMemory(vkDevice, *vertexBuffer, vertexBufferMemory->getMemory(), vertexBufferMemory->getOffset()));
+
+	const VkDeviceSize						imageSizeBytes			= (VkDeviceSize)(sizeof(deUint32)*renderSize.x()*renderSize.y());
+	const VkBufferCreateInfo				readImageBufferParams	=
+			{
+					VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,		// sType
+					DE_NULL,									// pNext
+					(VkBufferCreateFlags)0u,					// flags
+					imageSizeBytes,								// size
+					VK_BUFFER_USAGE_TRANSFER_DST_BIT,			// usage
+					VK_SHARING_MODE_EXCLUSIVE,					// sharingMode
+					1u,											// queueFamilyIndexCount
+					&queueFamilyIndex,							// pQueueFamilyIndices
+			};
+	const Unique<VkBuffer>					readImageBufferReference			(createBuffer(vk, vkDevice, &readImageBufferParams));
+	const UniquePtr<Allocation>				readImageBufferReferenceMemory	(memAlloc.allocate(getBufferMemoryRequirements(vk, vkDevice, *readImageBufferReference), MemoryRequirement::HostVisible));
+
+	VK_CHECK(vk.bindBufferMemory(vkDevice, *readImageBufferReference, readImageBufferReferenceMemory->getMemory(), readImageBufferReferenceMemory->getOffset()));
+
+	const VkImageCreateInfo					imageParams				=
+			{
+					VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,									// sType
+					DE_NULL,																// pNext
+					0u,																		// flags
+					VK_IMAGE_TYPE_2D,														// imageType
+					VK_FORMAT_R8G8B8A8_UNORM,												// format
+					{ (deUint32)renderSize.x(), (deUint32)renderSize.y(), 1 },				// extent
+					1u,																		// mipLevels
+					1u,																		// arraySize
+					VK_SAMPLE_COUNT_1_BIT,													// samples
+					VK_IMAGE_TILING_OPTIMAL,												// tiling
+					VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT|VK_IMAGE_USAGE_TRANSFER_SRC_BIT,	// usage
+					VK_SHARING_MODE_EXCLUSIVE,												// sharingMode
+					1u,																		// queueFamilyIndexCount
+					&queueFamilyIndex,														// pQueueFamilyIndices
+					VK_IMAGE_LAYOUT_UNDEFINED,												// initialLayout
+			};
+
+	const Unique<VkImage>					image					(createImage(vk, vkDevice, &imageParams));
+	const UniquePtr<Allocation>				imageMemory				(memAlloc.allocate(getImageMemoryRequirements(vk, vkDevice, *image), MemoryRequirement::Any));
+
+	VK_CHECK(vk.bindImageMemory(vkDevice, *image, imageMemory->getMemory(), imageMemory->getOffset()));
+
+	const Unique<VkRenderPass>				renderPass				(makeRenderPass(vk, vkDevice, VK_FORMAT_R8G8B8A8_UNORM));
+
+	const VkImageViewCreateInfo				colorAttViewParams		=
+			{
+					VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,		// sType
+					DE_NULL,										// pNext
+					0u,												// flags
+					*image,											// image
+					VK_IMAGE_VIEW_TYPE_2D,							// viewType
+					VK_FORMAT_R8G8B8A8_UNORM,						// format
+					{
+							VK_COMPONENT_SWIZZLE_R,
+							VK_COMPONENT_SWIZZLE_G,
+							VK_COMPONENT_SWIZZLE_B,
+							VK_COMPONENT_SWIZZLE_A
+					},												// components
+					{
+							VK_IMAGE_ASPECT_COLOR_BIT,						// aspectMask
+							0u,												// baseMipLevel
+							1u,												// levelCount
+							0u,												// baseArrayLayer
+							1u,												// layerCount
+					},												// subresourceRange
+			};
+	const Unique<VkImageView>				colorAttView			(createImageView(vk, vkDevice, &colorAttViewParams));
+
+	// Pipeline layout
+	const VkPipelineLayoutCreateInfo		pipelineLayoutParams	=
+			{
+					VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,			// sType
+					DE_NULL,												// pNext
+					(vk::VkPipelineLayoutCreateFlags)0,
+					0u,														// setLayoutCount
+					DE_NULL,												// pSetLayouts
+					0u,														// pushConstantRangeCount
+					DE_NULL,												// pPushConstantRanges
+			};
+	const Unique<VkPipelineLayout>			pipelineLayout			(createPipelineLayout(vk, vkDevice, &pipelineLayoutParams));
+
+	// Shaders
+	const Unique<VkShaderModule>			vertShaderModule1		(createShaderModule(vk, vkDevice, context.getBinaryCollection().get("vert1"), 0));
+	const Unique<VkShaderModule>			fragShaderModule1		(createShaderModule(vk, vkDevice, context.getBinaryCollection().get("frag1"), 0));
+	const Unique<VkShaderModule>			vertShaderModule2		(createShaderModule(vk, vkDevice, context.getBinaryCollection().get("vert2"), 0));
+	const Unique<VkShaderModule>			fragShaderModule2		(createShaderModule(vk, vkDevice, context.getBinaryCollection().get("frag2"), 0));
+
+	// Pipeline
+	const std::vector<VkViewport>			viewports				(1, makeViewport(renderSize));
+	const std::vector<VkRect2D>				scissors				(1, makeRect2D(renderSize));
+
+	const Unique<VkPipeline>				pipeline1				(makeGraphicsPipeline(vk,					// const DeviceInterface&            vk
+																						  vkDevice,				// const VkDevice                    device
+																						  *pipelineLayout,		// const VkPipelineLayout            pipelineLayout
+																						  *vertShaderModule1,	// const VkShaderModule              vertexShaderModule
+																						  DE_NULL,				// const VkShaderModule              tessellationControlModule
+																						  DE_NULL,				// const VkShaderModule              tessellationEvalModule
+																						  DE_NULL,				// const VkShaderModule              geometryShaderModule
+																						  *fragShaderModule1,	// const VkShaderModule              fragmentShaderModule
+																						  *renderPass,			// const VkRenderPass                renderPass
+																						  viewports,			// const std::vector<VkViewport>&    viewports
+																						  scissors));			// const std::vector<VkRect2D>&      scissors
+
+	const Unique<VkPipeline>				pipeline2				(makeGraphicsPipeline(vk,					// const DeviceInterface&            vk
+																						   vkDevice,				// const VkDevice                    device
+																						   *pipelineLayout,		// const VkPipelineLayout            pipelineLayout
+																						   *vertShaderModule2,	// const VkShaderModule              vertexShaderModule
+																						   DE_NULL,				// const VkShaderModule              tessellationControlModule
+																						   DE_NULL,				// const VkShaderModule              tessellationEvalModule
+																						   DE_NULL,				// const VkShaderModule              geometryShaderModule
+																						   *fragShaderModule2,	// const VkShaderModule              fragmentShaderModule
+																						   *renderPass,			// const VkRenderPass                renderPass
+																						   viewports,			// const std::vector<VkViewport>&    viewports
+																						   scissors));			// const std::vector<VkRect2D>&      scissors
+
+	// Framebuffer
+	const VkFramebufferCreateInfo			framebufferParams		=
+			{
+					VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,				// sType
+					DE_NULL,												// pNext
+					0u,														// flags
+					*renderPass,											// renderPass
+					1u,														// attachmentCount
+					&*colorAttView,											// pAttachments
+					(deUint32)renderSize.x(),								// width
+					(deUint32)renderSize.y(),								// height
+					1u,														// layers
+			};
+	const Unique<VkFramebuffer>				framebuffer				(createFramebuffer(vk, vkDevice, &framebufferParams));
+
+	const VkCommandPoolCreateInfo			cmdPoolParams			=
+			{
+					VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,					// sType
+					DE_NULL,													// pNext
+					VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT,			// flags
+					queueFamilyIndex,											// queueFamilyIndex
+			};
+	const Unique<VkCommandPool>				cmdPool					(createCommandPool(vk, vkDevice, &cmdPoolParams));
+
+	// Command buffer
+	const VkCommandBufferAllocateInfo		cmdBufParams			=
+			{
+					VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,			// sType
+					DE_NULL,												// pNext
+					*cmdPool,												// pool
+					VK_COMMAND_BUFFER_LEVEL_PRIMARY,						// level
+					1u,														// bufferCount
+			};
+	const Unique<VkCommandBuffer>			cmdBuf1					(allocateCommandBuffer(vk, vkDevice, &cmdBufParams));
+
+	recordCommandBufferForRenderShaderPair(
+			vk,
+			queueFamilyIndex,
+			image,
+			renderPass,
+			renderSize,
+			framebuffer,
+			clearColor,
+			pipeline1,
+			vertexBuffer,
+			readImageBufferReference,
+			imageSizeBytes,
+			cmdBuf1
+	);
+
+	// Upload vertex data
+	{
+		const VkMappedMemoryRange	range			=
+				{
+						VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,	// sType
+						DE_NULL,								// pNext
+						vertexBufferMemory->getMemory(),		// memory
+						0,										// offset
+						(VkDeviceSize)sizeof(vertices),			// size
+				};
+		void*						vertexBufPtr	= vertexBufferMemory->getHostPtr();
+
+		deMemcpy(vertexBufPtr, &vertices[0], sizeof(vertices));
+		VK_CHECK(vk.flushMappedMemoryRanges(vkDevice, 1u, &range));
+	}
+
+	// Submit & wait for completion
+	submitCommandsAndWait(vk, vkDevice, queue, cmdBuf1.get());
+
+	// Read results
+	{
+		const tcu::TextureFormat			tcuFormat		= vk::mapVkFormat(colorFormat);
+		const VkMappedMemoryRange			range			=
+				{
+						VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,	// sType
+						DE_NULL,								// pNext
+						readImageBufferReferenceMemory->getMemory(),		// memory
+						0,										// offset
+						imageSizeBytes,							// size
+				};
+		const tcu::ConstPixelBufferAccess	resultAccess	(tcuFormat, renderSize.x(), renderSize.y(), 1, readImageBufferReferenceMemory->getHostPtr());
+
+		VK_CHECK(vk.invalidateMappedMemoryRanges(vkDevice, 1u, &range));
+
+		context.getTestContext().getLog() << tcu::LogImage("color0", "", resultAccess);
+
+//		{
+//			tcu::TextureLevel	refImage		(tcuFormat, renderSize.x(), renderSize.y());
+//			const tcu::UVec4	threshold		(0u);
+//			const tcu::IVec3	posDeviation	(1,1,0);
+//
+//			tcu::clear(refImage.getAccess(), clearColor);
+//			renderReferenceTriangle(refImage.getAccess(), vertices);
+//
+//			if (tcu::intThresholdPositionDeviationCompare(context.getTestContext().getLog(),
+//														  "ComparisonResult",
+//														  "Image comparison result",
+//														  refImage.getAccess(),
+//														  resultAccess,
+//														  threshold,
+//														  posDeviation,
+//														  false,
+//														  tcu::COMPARE_LOG_RESULT))
+//				return tcu::TestStatus::pass("Rendering succeeded");
+//			else
+//				return tcu::TestStatus::fail("Image comparison failed");
+//		}
+	}
+
+	return tcu::TestStatus::pass("Rendering succeeded");
+}
+
 } // anonymous
 
 tcu::TestCaseGroup* createSmokeTests (tcu::TestContext& testCtx)
@@ -1060,6 +1614,8 @@ tcu::TestCaseGroup* createSmokeTests (tcu::TestContext& testCtx)
 	addFunctionCaseWithPrograms	(smokeTests.get(), "asm_triangle",				"", createTriangleAsmProgs,	renderTriangleTest);
 	addFunctionCaseWithPrograms	(smokeTests.get(), "asm_triangle_no_opname",	"", createProgsNoOpName,	renderTriangleTest);
 	addFunctionCaseWithPrograms	(smokeTests.get(), "unused_resolve_attachment",	"", createTriangleProgs,	renderTriangleUnusedResolveAttachmentTest);
+
+	addFunctionCaseWithPrograms	(smokeTests.get(), "asm_control_flow_segfault",	"", createControlFlowBugAsmProgs,	renderShaderPair);
 
 	return smokeTests.release();
 }
