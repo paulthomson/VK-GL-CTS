@@ -3,6 +3,8 @@
 *.user
 *.class
 .*
+/build_native/
+/cmake-build-debug/
 !.gitignore
 !.editorconfig
 !.travis.yml
