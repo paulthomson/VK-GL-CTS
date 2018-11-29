@@ -33,6 +33,7 @@ add_subdirectory(ycbcr)
 add_subdirectory(protected_memory)
 add_subdirectory(memory_model)
 add_subdirectory(util)
+add_subdirectory(graphicsfuzz)
 
 include_directories(
 	api
@@ -68,6 +69,7 @@ include_directories(
 	protected_memory
 	memory_model
 	util
+	graphicsfuzz
 	)
 
 set(DEQP_VK_SRCS
@@ -122,6 +124,7 @@ set(DEQP_VK_LIBS
 	deqp-vk-ycbcr
 	deqp-vk-protected-memory
 	deqp-vk-memory-model
+	deqp-vk-graphicsfuzz
 	)
 
 if (DE_COMPILER_IS_MSC AND (DE_PTR_SIZE EQUAL 4))

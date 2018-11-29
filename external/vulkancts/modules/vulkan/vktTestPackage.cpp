@@ -87,6 +87,7 @@
 #include "vktProtectedMemTests.hpp"
 #include "vktDeviceGroupTests.hpp"
 #include "vktMemoryModelTests.hpp"
+#include "vktGraphicsFuzzTests.hpp"
 
 #include <vector>
 #include <sstream>
@@ -487,6 +488,7 @@ void TestPackage::init (void)
 	addChild(DeviceGroup::createTests		(m_testCtx));
 	addChild(MemoryModel::createTests		(m_testCtx));
 	addChild(conditional::createTests		(m_testCtx));
+	addChild(graphicsfuzz::createTests		(m_testCtx));
 }
 
 } // vkt
