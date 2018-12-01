@@ -26,7 +26,12 @@
 #include "tcuTestLog.hpp"
 
 #include "vktTestCase.hpp"
-#include "vktTestGroupUtil.hpp"
+#include "vktTestCaseUtil.hpp"
+
+#include "vkDefs.hpp"
+#include "vkObjUtil.hpp"
+#include "vkRefUtil.hpp"
+#include "vkTypeUtil.hpp"
 
 namespace vkt
 {
@@ -36,52 +41,65 @@ namespace graphicsfuzz
 namespace
 {
 
-class GraphicsFuzzTestInstance : public TestInstance
+using namespace vk;
+
+tcu::TestStatus compileShaders (Context& context)
 {
-public:
-								GraphicsFuzzTestInstance	(Context&	ctx)
-									: TestInstance	(ctx)
-	{}
-	virtual tcu::TestStatus		iterate						(void)
-	{
-		tcu::TestLog&			log				= m_context.getTestContext().getLog();
-		log << tcu::TestLog::Message << "GraphicsFuzz mock test" << tcu::TestLog::EndMessage;
-		const ::std::string		result			= "GraphicsFuzz mock result";
-		return tcu::TestStatus::pass(result);
-    }
+  const DeviceInterface&	vk					= context.getDeviceInterface();
+  const VkDevice			vkDevice			= context.getDevice();
+  const tcu::IVec2						renderSize				(256, 256);
 
-private:
-};
+  const Unique<VkRenderPass>				renderPass				(makeRenderPass(vk, vkDevice, VK_FORMAT_R8G8B8A8_UNORM));
 
-class GraphicsFuzzTestCase : public TestCase
-{
-public:
-							GraphicsFuzzTestCase	(tcu::TestContext& 	testCtx)
-								: TestCase	(testCtx, "graphicsfuzz_mock", "Run some shaders.")
-	{}
+  // Pipeline layout
+  const VkPipelineLayoutCreateInfo		pipelineLayoutParams	=
+      {
+        VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,			// sType
+        DE_NULL,												// pNext
+        (vk::VkPipelineLayoutCreateFlags)0,
+        0u,														// setLayoutCount
+        DE_NULL,												// pSetLayouts
+        0u,														// pushConstantRangeCount
+        DE_NULL,												// pPushConstantRanges
+      };
+  const Unique<VkPipelineLayout>			pipelineLayout			(createPipelineLayout(vk, vkDevice, &pipelineLayoutParams));
 
-	virtual					~GraphicsFuzzTestCase	(void)
-	{}
-	virtual TestInstance*	createInstance			(Context&				ctx) const
-	{
-		return new GraphicsFuzzTestInstance(ctx);
-	}
 
-private:
-};
+  // Shaders
+  const Unique<VkShaderModule>			vertShaderModule		(createShaderModule(vk, vkDevice, context.getBinaryCollection().get("vert"), 0));
+  const Unique<VkShaderModule>			fragShaderModule		(createShaderModule(vk, vkDevice, context.getBinaryCollection().get("frag"), 0));
 
-void createGraphicsFuzzTests (tcu::TestCaseGroup* graphicsFuzzTests)
-{
-	tcu::TestContext&	testCtx	= graphicsFuzzTests->getTestContext();
+  // Pipeline
+  const std::vector<VkViewport>			viewports				(1, makeViewport(renderSize));
+  const std::vector<VkRect2D>				scissors				(1, makeRect2D(renderSize));
 
-	graphicsFuzzTests->addChild(new GraphicsFuzzTestCase	(testCtx));
+  const Unique<VkPipeline>				pipeline				(makeGraphicsPipeline(vk,					// const DeviceInterface&            vk
+                                                                                      vkDevice,				// const VkDevice                    device
+                                                                                      *pipelineLayout,		// const VkPipelineLayout            pipelineLayout
+                                                                                      *vertShaderModule,	// const VkShaderModule              vertexShaderModule
+                                                                                      DE_NULL,				// const VkShaderModule              tessellationControlModule
+                                                                                      DE_NULL,				// const VkShaderModule              tessellationEvalModule
+                                                                                      DE_NULL,				// const VkShaderModule              geometryShaderModule
+                                                                                      *fragShaderModule,	// const VkShaderModule              fragmentShaderModule
+                                                                                      *renderPass,			// const VkRenderPass                renderPass
+                                                                                      viewports,			// const std::vector<VkViewport>&    viewports
+                                                                                      scissors));			// const std::vector<VkRect2D>&      scissors
+
+  const ::std::string		result			= "GraphicsFuzz mock result";
+  return tcu::TestStatus::pass(result);
 }
+
+#include "graphicsFuzzTests.inc"
 
 } // anonymous
 
 tcu::TestCaseGroup* createTests (tcu::TestContext& testCtx)
 {
-	return createTestGroup(testCtx, "graphicsfuzz", "GraphicsFuzz Tests", createGraphicsFuzzTests);
+  	de::MovePtr<tcu::TestCaseGroup>	graphicsFuzzTests	(new tcu::TestCaseGroup(testCtx, "graphicsfuzz", "GraphicsFuzz Tests"));
+
+#include "graphicsFuzzAddTests.inc"
+
+    return graphicsFuzzTests.release();
 }
 
 } // api
