@@ -23,21 +23,10 @@
 
 #include "vktGraphicsFuzzTests.hpp"
 
-#include "vktTestGroupUtil.hpp"
-
-#include "tcuDefs.hpp"
-#include "tcuTestCase.hpp"
 #include "tcuTestLog.hpp"
-#include "tcuFunctionLibrary.hpp"
-#include "tcuPlatform.hpp"
-
-#include "vkDefs.hpp"
-#include "vkPlatform.hpp"
 
 #include "vktTestCase.hpp"
-
-#include "vkRefUtil.hpp"
-#include "vkDeviceUtil.hpp"
+#include "vktTestGroupUtil.hpp"
 
 namespace vkt
 {
@@ -67,7 +56,7 @@ private:
 class GraphicsFuzzTestCase : public TestCase
 {
 public:
-							GraphicsFuzzTestCase	(tcu::TestContext&		testCtx)
+							GraphicsFuzzTestCase	(tcu::TestContext& 	testCtx)
 								: TestCase	(testCtx, "graphicsfuzz_mock", "Run some shaders.")
 	{}
 

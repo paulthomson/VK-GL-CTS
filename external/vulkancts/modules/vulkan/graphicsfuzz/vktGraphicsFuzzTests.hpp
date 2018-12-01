@@ -23,7 +23,6 @@
  * \brief GraphicsFuzz tests
  *//*--------------------------------------------------------------------*/
 
-#include "tcuDefs.hpp"
 #include "tcuTestCase.hpp"
 
 namespace vkt
