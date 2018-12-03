@@ -52,6 +52,9 @@ namespace
 using namespace vk;
 using de::UniquePtr;
 
+typedef de::SharedPtr<vk::Unique<vk::VkBuffer> > 		VkBufferSp;
+typedef de::SharedPtr<vk::Allocation>					AllocationSp;
+
 typedef struct UniformEntry {
   size_t size;
   void *value;
@@ -297,8 +300,8 @@ tcu::TestStatus renderShaderPair (Context& context)
   	Unique<VkDescriptorSet> descriptorSet (allocateDescriptorSet(vk, vkDevice, &descriptorSetAllocateInfo));
 
     // create uniforms buffers
-    std::vector< const Unique<VkBuffer> > uniformBuffers;
-	std::vector< const UniquePtr<Allocation> > uniformBufferMemories;
+    std::vector<de::SharedPtr<Unique<VkBuffer> > > uniformBuffers;
+	std::vector<de::SharedPtr<Allocation> > uniformBufferMemories;
 
 
     for (deUint32 i = 0; i < uniforms.size(); i++) {
@@ -316,24 +319,24 @@ tcu::TestStatus renderShaderPair (Context& context)
                 };
 
 
-		const Unique<VkBuffer> buffer (vk::createBuffer(vk, vkDevice, &createInfo));
-		const VkMemoryRequirements requirements = getBufferMemoryRequirements(vk, vkDevice, *buffer);
-		const Unique<Allocation> allocation (memAlloc.allocate(requirements, MemoryRequirement::HostVisible));
+		VkBufferSp buffer (new Unique<VkBuffer>(vk::createBuffer(vk, vkDevice, &createInfo)));
+		VkMemoryRequirements requirements = getBufferMemoryRequirements(vk, vkDevice, **buffer);
+		AllocationSp allocation (memAlloc.allocate(requirements, MemoryRequirement::HostVisible).release());
 
 		void *data = mapMemory(vk, vkDevice, allocation->getMemory(), 0, requirements.size, 0);
 		mempcpy(data, uniforms[i].value, uniforms[i].size);
 		vk.unmapMemory(vkDevice, allocation->getMemory());
 
-		VK_CHECK(vk.bindBufferMemory(vkDevice, *buffer, allocation->getMemory(), allocation->getOffset()));
+		VK_CHECK(vk.bindBufferMemory(vkDevice, **buffer, allocation->getMemory(), allocation->getOffset()));
 
 		uniformBuffers.push_back(buffer);
-		uniformBufferMemories.push_back(allocation.move());
+		uniformBufferMemories.push_back(allocation);
     }
 
     DescriptorSetUpdateBuilder  descriptorSetUpdateBuilder;
 	for (deUint32 i = 0; i < uniforms.size(); i++)
 	{
-	  VkDescriptorBufferInfo descriptorBufferInfo = makeDescriptorBufferInfo(uniformBuffers[i].get(), 0, uniforms[i].size);
+	  VkDescriptorBufferInfo descriptorBufferInfo = makeDescriptorBufferInfo(**uniformBuffers[i], 0, uniforms[i].size);
 	  descriptorSetUpdateBuilder.writeSingle(*descriptorSet, DescriptorSetUpdateBuilder::Location::binding(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &descriptorBufferInfo);
 	}
 	descriptorSetUpdateBuilder.update(vk, vkDevice);
