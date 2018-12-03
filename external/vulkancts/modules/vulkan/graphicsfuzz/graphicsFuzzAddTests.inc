@@ -1,2 +1,2 @@
 // Generated
-addFunctionCaseWithPrograms	(graphicsFuzzTests.get(), "mock",	"", createMockProgs, compileShaders);
+addFunctionCaseWithPrograms	(graphicsFuzzTests.get(), "mock",	"", createMockProgs, renderShaderPair);
