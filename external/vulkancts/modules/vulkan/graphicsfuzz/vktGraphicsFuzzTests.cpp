@@ -268,27 +268,27 @@ tcu::TestStatus renderShaderPair (Context& context)
 
 	VK_CHECK(vk.bindImageMemory(vkDevice, *image, imageMemory->getMemory(), imageMemory->getOffset()));
 
-    // ============================================================
-    // Uniforms
-    std::vector<UniformEntry> uniforms; //_entries_;
-    float f = 42.0;
-    UniformEntry foo = {sizeof(float), &f};
-    //uniform_entries_.push_back(foo);
-    uniforms.push_back(foo);
+	// ============================================================
+	// Uniforms
+	std::vector<UniformEntry> uniforms; //_entries_;
+	float f = 42.0;
+	UniformEntry foo = {sizeof(float), &f};
+	//uniform_entries_.push_back(foo);
+	uniforms.push_back(foo);
 
 	DescriptorSetLayoutBuilder descriptorSetLayoutBuilder;
 
-    for (deUint32 i = 0; i < uniforms.size(); i++) {
-      descriptorSetLayoutBuilder.addBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, VK_SHADER_STAGE_ALL, DE_NULL);
-    }
-    const Unique<VkDescriptorSetLayout> descriptorSetLayout (descriptorSetLayoutBuilder.build(vk, vkDevice));
+	for (deUint32 i = 0; i < uniforms.size(); i++) {
+		descriptorSetLayoutBuilder.addBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, VK_SHADER_STAGE_ALL, DE_NULL);
+	}
+	const Unique<VkDescriptorSetLayout> descriptorSetLayout (descriptorSetLayoutBuilder.build(vk, vkDevice));
 
 	DescriptorPoolBuilder descriptorPoolBuilder;
-    descriptorPoolBuilder.addType(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, (deUint32) uniforms.size());
-    Move<VkDescriptorPool> descriptorPool = descriptorPoolBuilder.build(vk, vkDevice, VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT, 1);
+	descriptorPoolBuilder.addType(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, (deUint32) uniforms.size());
+	Move<VkDescriptorPool> descriptorPool = descriptorPoolBuilder.build(vk, vkDevice, VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT, 1);
 
-    // make descriptor set
-  	const VkDescriptorSetAllocateInfo descriptorSetAllocateInfo =
+	// make descriptor set
+	const VkDescriptorSetAllocateInfo descriptorSetAllocateInfo =
 		  {
 			VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,		// VkStructureType				sType;
 			DE_NULL,											// const void*					pNext;
@@ -297,26 +297,25 @@ tcu::TestStatus renderShaderPair (Context& context)
 			&descriptorSetLayout.get(),											// const VkDescriptorSetLayout*	pSetLayouts;
 	 	 };
 
-  	Unique<VkDescriptorSet> descriptorSet (allocateDescriptorSet(vk, vkDevice, &descriptorSetAllocateInfo));
+	Unique<VkDescriptorSet> descriptorSet (allocateDescriptorSet(vk, vkDevice, &descriptorSetAllocateInfo));
 
-    // create uniforms buffers
-    std::vector<de::SharedPtr<Unique<VkBuffer> > > uniformBuffers;
+	// create uniforms buffers
+	std::vector<de::SharedPtr<Unique<VkBuffer> > > uniformBuffers;
 	std::vector<de::SharedPtr<Allocation> > uniformBufferMemories;
 
 
-    for (deUint32 i = 0; i < uniforms.size(); i++) {
-
-            const vk::VkBufferCreateInfo	createInfo =
-                {
-                        vk::VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
-                        DE_NULL,
-                        0u,								// flags
-                        (vk::VkDeviceSize)uniforms[i].size,	// size
-                        VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,						// usage
-                        vk::VK_SHARING_MODE_EXCLUSIVE,	// sharingMode
-                        0u,								// queueFamilyCount
-                        DE_NULL,						// pQueueFamilyIndices
-                };
+	for (deUint32 i = 0; i < uniforms.size(); i++) {
+			const vk::VkBufferCreateInfo	createInfo =
+				{
+						vk::VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+						DE_NULL,
+						0u,								// flags
+						(vk::VkDeviceSize)uniforms[i].size,	// size
+						VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,						// usage
+						vk::VK_SHARING_MODE_EXCLUSIVE,	// sharingMode
+						0u,								// queueFamilyCount
+						DE_NULL,						// pQueueFamilyIndices
+				};
 
 
 		VkBufferSp buffer (new Unique<VkBuffer>(vk::createBuffer(vk, vkDevice, &createInfo)));
@@ -331,17 +330,17 @@ tcu::TestStatus renderShaderPair (Context& context)
 
 		uniformBuffers.push_back(buffer);
 		uniformBufferMemories.push_back(allocation);
-    }
+	}
 
-    DescriptorSetUpdateBuilder  descriptorSetUpdateBuilder;
+	DescriptorSetUpdateBuilder  descriptorSetUpdateBuilder;
 	for (deUint32 i = 0; i < uniforms.size(); i++)
 	{
-	  VkDescriptorBufferInfo descriptorBufferInfo = makeDescriptorBufferInfo(**uniformBuffers[i], 0, uniforms[i].size);
-	  descriptorSetUpdateBuilder.writeSingle(*descriptorSet, DescriptorSetUpdateBuilder::Location::binding(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &descriptorBufferInfo);
+		VkDescriptorBufferInfo descriptorBufferInfo = makeDescriptorBufferInfo(**uniformBuffers[i], 0, uniforms[i].size);
+		descriptorSetUpdateBuilder.writeSingle(*descriptorSet, DescriptorSetUpdateBuilder::Location::binding(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &descriptorBufferInfo);
 	}
 	descriptorSetUpdateBuilder.update(vk, vkDevice);
 
-    // ============================================================
+	// ============================================================
 
 	const Unique<VkRenderPass>				renderPass				(makeRenderPass(vk, vkDevice, VK_FORMAT_R8G8B8A8_UNORM));
 
