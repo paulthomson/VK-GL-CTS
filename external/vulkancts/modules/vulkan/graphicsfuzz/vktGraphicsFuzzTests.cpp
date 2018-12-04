@@ -186,7 +186,7 @@ void recordCommandBufferForRenderShaderPair (
 	endCommandBuffer(vk, *cmdBuf);
 }
 
-tcu::TestStatus renderShaderPair (Context& context)
+tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> uniformEntries)
 {
 	const VkDevice							vkDevice				= context.getDevice();
 	const DeviceInterface&					vk						= context.getDeviceInterface();
@@ -268,23 +268,15 @@ tcu::TestStatus renderShaderPair (Context& context)
 
 	VK_CHECK(vk.bindImageMemory(vkDevice, *image, imageMemory->getMemory(), imageMemory->getOffset()));
 
-	// ============================================================
-	// Uniforms
-	std::vector<UniformEntry> uniforms; //_entries_;
-	float f = 150.0;
-	UniformEntry foo = {sizeof(float), &f};
-	//uniform_entries_.push_back(foo);
-	uniforms.push_back(foo);
-
 	DescriptorSetLayoutBuilder descriptorSetLayoutBuilder;
 
-	for (deUint32 i = 0; i < uniforms.size(); i++) {
+	for (deUint32 i = 0; i < uniformEntries.size(); i++) {
 		descriptorSetLayoutBuilder.addBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, VK_SHADER_STAGE_ALL, DE_NULL);
 	}
 	const Unique<VkDescriptorSetLayout> descriptorSetLayout (descriptorSetLayoutBuilder.build(vk, vkDevice));
 
 	DescriptorPoolBuilder descriptorPoolBuilder;
-	descriptorPoolBuilder.addType(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, (deUint32) uniforms.size());
+	descriptorPoolBuilder.addType(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, (deUint32) uniformEntries.size());
 	Move<VkDescriptorPool> descriptorPool = descriptorPoolBuilder.build(vk, vkDevice, VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT, 1);
 
 	// make descriptor set
@@ -292,25 +284,25 @@ tcu::TestStatus renderShaderPair (Context& context)
 		  {
 			VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,		// VkStructureType				sType;
 			DE_NULL,											// const void*					pNext;
-			descriptorPool.get(),										// VkDescriptorPool				descriptorPool;
+			descriptorPool.get(),								// VkDescriptorPool				descriptorPool;
 			1u,													// deUint32						descriptorSetCount;
-			&descriptorSetLayout.get(),											// const VkDescriptorSetLayout*	pSetLayouts;
+			&descriptorSetLayout.get(),							// const VkDescriptorSetLayout*	pSetLayouts;
 	 	 };
 
 	Unique<VkDescriptorSet> descriptorSet (allocateDescriptorSet(vk, vkDevice, &descriptorSetAllocateInfo));
 
-	// create uniforms buffers
+	// create uniformEntries buffers
 	std::vector<de::SharedPtr<Unique<VkBuffer> > > uniformBuffers;
 	std::vector<de::SharedPtr<Allocation> > uniformBufferMemories;
 
 
-	for (deUint32 i = 0; i < uniforms.size(); i++) {
+	for (deUint32 i = 0; i < uniformEntries.size(); i++) {
 			const vk::VkBufferCreateInfo	createInfo =
 				{
 						vk::VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
 						DE_NULL,
 						0u,								// flags
-						(vk::VkDeviceSize)uniforms[i].size,	// size
+						(vk::VkDeviceSize)uniformEntries[i].size,	// size
 						VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,	// usage
 						vk::VK_SHARING_MODE_EXCLUSIVE,	// sharingMode
 						0u,								// queueFamilyCount
@@ -323,7 +315,7 @@ tcu::TestStatus renderShaderPair (Context& context)
 		AllocationSp allocation (memAlloc.allocate(requirements, MemoryRequirement::HostVisible).release());
 
 		void *data = mapMemory(vk, vkDevice, allocation->getMemory(), 0, requirements.size, 0);
-		mempcpy(data, uniforms[i].value, uniforms[i].size);
+		mempcpy(data, uniformEntries[i].value, uniformEntries[i].size);
 		vk.unmapMemory(vkDevice, allocation->getMemory());
 
 		VK_CHECK(vk.bindBufferMemory(vkDevice, **buffer, allocation->getMemory(), allocation->getOffset()));
@@ -333,14 +325,12 @@ tcu::TestStatus renderShaderPair (Context& context)
 	}
 
 	DescriptorSetUpdateBuilder  descriptorSetUpdateBuilder;
-	for (deUint32 i = 0; i < uniforms.size(); i++)
+	for (deUint32 i = 0; i < uniformEntries.size(); i++)
 	{
-		VkDescriptorBufferInfo descriptorBufferInfo = makeDescriptorBufferInfo(**uniformBuffers[i], 0, uniforms[i].size);
+		VkDescriptorBufferInfo descriptorBufferInfo = makeDescriptorBufferInfo(**uniformBuffers[i], 0, uniformEntries[i].size);
 		descriptorSetUpdateBuilder.writeSingle(*descriptorSet, DescriptorSetUpdateBuilder::Location::binding(i), VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &descriptorBufferInfo);
 	}
 	descriptorSetUpdateBuilder.update(vk, vkDevice);
-
-	// ============================================================
 
 	const Unique<VkRenderPass>				renderPass				(makeRenderPass(vk, vkDevice, VK_FORMAT_R8G8B8A8_UNORM));
 

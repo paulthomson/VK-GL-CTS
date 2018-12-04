@@ -228,3 +228,15 @@ void createMockProgs (SourceCollections& dst)
 "               OpFunctionEnd\n";
 
 }
+
+tcu::TestStatus runMock (Context& context) {
+    std::vector<UniformEntry> uniformEntries;
+    UniformEntry uniformEntry;
+
+    float u1 = 126.0f;
+    uniformEntry.size = sizeof(float);
+    uniformEntry.value = (void *)(&u1);
+    uniformEntries.push_back(uniformEntry);
+
+    return renderShaderPair(context, uniformEntries);
+}
