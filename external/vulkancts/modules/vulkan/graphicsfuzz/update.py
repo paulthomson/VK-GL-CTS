@@ -86,14 +86,15 @@ def testDeclaration(testName, asmFilename, jsonFilename):
 
     res = ''
 
-    res += 'void create{}Progs (SourceCollections& dst)\n'.format(testName)
+    res += 'void {} (SourceCollections& dst)\n'.format(createProgsFuncName(testName))
     res += '{\n'
     res += 'dst.spirvAsmSources.add("frag1") <<\n'
     res += asmToCString(asmFilename)
     res += ';\n'
     res += '}\n\n'
 
-    res += 'tcu::TestStatus run{} (Context& context) {\n'
+    res += 'tcu::TestStatus {} (Context& context)\n'.format(runFuncName(testName))
+    res += '{\n'
     res += 'std::vector<UniformEntry> uniformEntries;\n'
     res += 'UniformEntry uniformEntry;\n\n'
     res += uniformsJSONToCDecl(jsonFilename)
@@ -104,6 +105,7 @@ def testDeclaration(testName, asmFilename, jsonFilename):
 
 def parseArgs ():
     parser = argparse.ArgumentParser(description = "Update GraphicsFuzz tests")
+    parser.add_argument("name", help="Test name")
     parser.add_argument("reference", help="Reference SPIR-V fragment shader in textual assembly")
     parser.add_argument("variant", help="Variant SPIR-V fragment shader in textual assembly")
     parser.add_argument("uniforms", help="Uniforms declaration in JSON file")
@@ -113,4 +115,7 @@ if __name__ == "__main__":
     args = parseArgs()
     assert(os.path.exists(args.reference))
     assert(os.path.exists(args.variant))
-    print(testDeclaration('Hugues', args.reference, args.uniforms))
+
+    # FIXME: how to get handle Vertex shader, or the lack thereof?
+
+    print(testDeclaration(args.name, args.reference, args.uniforms))
