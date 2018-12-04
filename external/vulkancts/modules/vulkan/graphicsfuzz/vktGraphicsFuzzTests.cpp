@@ -271,7 +271,7 @@ tcu::TestStatus renderShaderPair (Context& context)
 	// ============================================================
 	// Uniforms
 	std::vector<UniformEntry> uniforms; //_entries_;
-	float f = 42.0;
+	float f = 150.0;
 	UniformEntry foo = {sizeof(float), &f};
 	//uniform_entries_.push_back(foo);
 	uniforms.push_back(foo);
@@ -311,7 +311,7 @@ tcu::TestStatus renderShaderPair (Context& context)
 						DE_NULL,
 						0u,								// flags
 						(vk::VkDeviceSize)uniforms[i].size,	// size
-						VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,						// usage
+						VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,	// usage
 						vk::VK_SHARING_MODE_EXCLUSIVE,	// sharingMode
 						0u,								// queueFamilyCount
 						DE_NULL,						// pQueueFamilyIndices
