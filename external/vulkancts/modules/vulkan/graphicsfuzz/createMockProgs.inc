@@ -167,7 +167,7 @@ void createMockProgs (SourceCollections& dst)
 "; SPIR-V\n"
 "; Version: 1.0\n"
 "; Generator: Khronos Glslang Reference Front End; 7\n"
-"; Bound: 34\n"
+"; Bound: 47\n"
 "; Schema: 0\n"
 "               OpCapability Shader\n"
 "          %1 = OpExtInstImport \"GLSL.std.450\"\n"
@@ -181,12 +181,19 @@ void createMockProgs (SourceCollections& dst)
 "               OpName %buf1 \"buf1\"\n"
 "               OpMemberName %buf1 0 \"foo\"\n"
 "               OpName %_ \"\"\n"
+"               OpName %buf2 \"buf2\"\n"
+"               OpMemberName %buf2 0 \"bar\"\n"
+"               OpName %__0 \"\"\n"
 "               OpDecorate %outColor Location 0\n"
 "               OpDecorate %gl_FragCoord BuiltIn FragCoord\n"
 "               OpMemberDecorate %buf1 0 Offset 0\n"
 "               OpDecorate %buf1 Block\n"
 "               OpDecorate %_ DescriptorSet 0\n"
 "               OpDecorate %_ Binding 0\n"
+"               OpMemberDecorate %buf2 0 Offset 0\n"
+"               OpDecorate %buf2 Block\n"
+"               OpDecorate %__0 DescriptorSet 0\n"
+"               OpDecorate %__0 Binding 1\n"
 "       %void = OpTypeVoid\n"
 "          %3 = OpTypeFunction %void\n"
 "      %float = OpTypeFloat 32\n"
@@ -209,6 +216,11 @@ void createMockProgs (SourceCollections& dst)
 "%_ptr_Uniform_float = OpTypePointer Uniform %float\n"
 "       %bool = OpTypeBool\n"
 "%_ptr_Output_float = OpTypePointer Output %float\n"
+"       %buf2 = OpTypeStruct %float\n"
+"%_ptr_Uniform_buf2 = OpTypePointer Uniform %buf2\n"
+"        %__0 = OpVariable %_ptr_Uniform_buf2 Uniform\n"
+"  %float_0_5 = OpConstant %float 0.5\n"
+"     %uint_2 = OpConstant %uint 2\n"
 "       %main = OpFunction %void None %3\n"
 "          %5 = OpLabel\n"
 "               OpStore %outColor %12\n"
@@ -224,6 +236,18 @@ void createMockProgs (SourceCollections& dst)
 "               OpStore %33 %float_0\n"
 "               OpBranch %31\n"
 "         %31 = OpLabel\n"
+"         %34 = OpAccessChain %_ptr_Input_float %gl_FragCoord %uint_0\n"
+"         %35 = OpLoad %float %34\n"
+"         %39 = OpAccessChain %_ptr_Uniform_float %__0 %int_0\n"
+"         %40 = OpLoad %float %39\n"
+"         %41 = OpFOrdGreaterThan %bool %35 %40\n"
+"               OpSelectionMerge %43 None\n"
+"               OpBranchConditional %41 %42 %43\n"
+"         %42 = OpLabel\n"
+"         %46 = OpAccessChain %_ptr_Output_float %outColor %uint_2\n"
+"               OpStore %46 %float_0_5\n"
+"               OpBranch %43\n"
+"         %43 = OpLabel\n"
 "               OpReturn\n"
 "               OpFunctionEnd\n";
 
@@ -233,9 +257,14 @@ tcu::TestStatus runMock (Context& context) {
     std::vector<UniformEntry> uniformEntries;
     UniformEntry uniformEntry;
 
-    float u1 = 126.0f;
+    float u1 = 42.0f;
     uniformEntry.size = sizeof(float);
     uniformEntry.value = (void *)(&u1);
+    uniformEntries.push_back(uniformEntry);
+
+    float u2 = 150.0f;
+    uniformEntry.size = sizeof(float);
+    uniformEntry.value = (void *)(&u2);
     uniformEntries.push_back(uniformEntry);
 
     return renderShaderPair(context, uniformEntries);
