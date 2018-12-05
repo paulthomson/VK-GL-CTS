@@ -1,2 +1,0 @@
-// Generated
-#include "createMockProgs.inc"

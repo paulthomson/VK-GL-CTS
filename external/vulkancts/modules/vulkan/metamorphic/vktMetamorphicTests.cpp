@@ -510,7 +510,7 @@ tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> un
 	return tcu::TestStatus::pass("Rendering succeeded");
 }
 
-#include "graphicsFuzzTests.inc"
+#include "graphicsFuzzTests.inl"
 
 } // anonymous
 
@@ -518,7 +518,7 @@ tcu::TestCaseGroup* createTests (tcu::TestContext& testCtx)
 {
   	de::MovePtr<tcu::TestCaseGroup>	metamorphicTests	(new tcu::TestCaseGroup(testCtx, "metamorphic", "Metamorphic Tests"));
 
-#include "graphicsFuzzAddTests.inc"
+#include "graphicsFuzzAddTests.inl"
 
     return metamorphicTests.release();
 }
