@@ -18,10 +18,10 @@
  *
  *//*!
  * \file
- * \brief GraphicsFuzz Tests
+ * \brief Metamorphic Tests
  *//*--------------------------------------------------------------------*/
 
-#include "vktGraphicsFuzzTests.hpp"
+#include "vktMetamorphicTests.hpp"
 
 #include "vktTestCase.hpp"
 #include "vktTestCaseUtil.hpp"
@@ -43,7 +43,7 @@
 
 namespace vkt
 {
-namespace graphicsfuzz
+namespace metamorphic
 {
 
 namespace
@@ -315,7 +315,7 @@ tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> un
 		AllocationSp allocation (memAlloc.allocate(requirements, MemoryRequirement::HostVisible).release());
 
 		void *data = mapMemory(vk, vkDevice, allocation->getMemory(), 0, requirements.size, 0);
-		mempcpy(data, uniformEntries[i].value, uniformEntries[i].size);
+		memcpy(data, uniformEntries[i].value, uniformEntries[i].size);
 		vk.unmapMemory(vkDevice, allocation->getMemory());
 
 		VK_CHECK(vk.bindBufferMemory(vkDevice, **buffer, allocation->getMemory(), allocation->getOffset()));
@@ -516,11 +516,11 @@ tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> un
 
 tcu::TestCaseGroup* createTests (tcu::TestContext& testCtx)
 {
-  	de::MovePtr<tcu::TestCaseGroup>	graphicsFuzzTests	(new tcu::TestCaseGroup(testCtx, "graphicsfuzz", "GraphicsFuzz Tests"));
+  	de::MovePtr<tcu::TestCaseGroup>	metamorphicTests	(new tcu::TestCaseGroup(testCtx, "metamorphic", "Metamorphic Tests"));
 
 #include "graphicsFuzzAddTests.inc"
 
-    return graphicsFuzzTests.release();
+    return metamorphicTests.release();
 }
 
 } // api

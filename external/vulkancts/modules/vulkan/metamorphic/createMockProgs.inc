@@ -262,7 +262,7 @@ tcu::TestStatus runMock (Context& context) {
     uniformEntry.value = (void *)(&u1);
     uniformEntries.push_back(uniformEntry);
 
-    float u2 = 150.0f;
+    float u2 = 300.0f;
     uniformEntry.size = sizeof(float);
     uniformEntry.value = (void *)(&u2);
     uniformEntries.push_back(uniformEntry);

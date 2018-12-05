@@ -1,5 +1,5 @@
-#ifndef _VKTGRAPHICSFUZZTESTS_HPP
-#define _VKTGRAPHICSFUZZTESTS_HPP
+#ifndef _VKTMETAMORPHICTESTS_HPP
+#define _VKTMETAMORPHICTESTS_HPP
 /*-------------------------------------------------------------------------
  * Vulkan Conformance Tests
  * ------------------------
@@ -20,19 +20,19 @@
  *
  *//*!
  * \file
- * \brief GraphicsFuzz tests
+ * \brief Metamorphic tests
  *//*--------------------------------------------------------------------*/
 
 #include "tcuTestCase.hpp"
 
 namespace vkt
 {
-namespace graphicsfuzz
+namespace metamorphic
 {
 
 tcu::TestCaseGroup*		createTests		(tcu::TestContext& testCtx);
 
-} // graphicsfuzz
+} // metamorphic
 } // vkt
 
-#endif // _VKTGRAPHICSFUZZTESTS_HPP
+#endif // _VKTMETAMORPHICTESTS_HPP
