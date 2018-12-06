@@ -36,7 +36,7 @@ namespace {
 
 using namespace vk;
 
-void initBug002Progs (SourceCollections& dst)
+void initPrograms1 (SourceCollections& dst)
 {
 
 	dst.spirvAsmSources.add("vert") <<
@@ -422,7 +422,7 @@ void initBug002Progs (SourceCollections& dst)
 
 }
 
-tcu::TestStatus runBug002 (Context& context) {
+tcu::TestStatus runTest1 (Context& context) {
 	std::vector<UniformEntry> uniformEntries;
 	UniformEntry uniformEntry;
 
@@ -440,7 +440,7 @@ tcu::TestCaseGroup* createTests (tcu::TestContext& testCtx)
 {
 	de::MovePtr<tcu::TestCaseGroup>	metamorphicTests	(new tcu::TestCaseGroup(testCtx, "metamorphic", "Metamorphic Tests"));
 
-	addFunctionCaseWithPrograms	(metamorphicTests.get(), "bug002",	"", initBug002Progs, runBug002);
+	addFunctionCaseWithPrograms	(metamorphicTests.get(), "metamorphic1",	"", initPrograms1, runTest1);
 
 	return metamorphicTests.release();
 }
