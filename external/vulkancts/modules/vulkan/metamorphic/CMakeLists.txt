@@ -6,6 +6,8 @@ include_directories(
 	)
 
 set(DEQP_VK_METAMORPHIC_SRCS
+	vktMetamorphic.cpp
+	vktMetamorphic.hpp
 	vktMetamorphicTests.cpp
 	vktMetamorphicTests.hpp
 	)
