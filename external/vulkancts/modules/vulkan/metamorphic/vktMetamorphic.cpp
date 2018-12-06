@@ -365,9 +365,8 @@ tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> un
 	const Unique<VkPipelineLayout>			pipelineLayout			(createPipelineLayout(vk, vkDevice, &pipelineLayoutParams));
 
 	// Shaders
-	const Unique<VkShaderModule>			vertShaderModule1		(createShaderModule(vk, vkDevice, context.getBinaryCollection().get("vert1"), 0));
+	const Unique<VkShaderModule>			vertShaderModule		(createShaderModule(vk, vkDevice, context.getBinaryCollection().get("vert"), 0));
 	const Unique<VkShaderModule>			fragShaderModule1		(createShaderModule(vk, vkDevice, context.getBinaryCollection().get("frag1"), 0));
-	const Unique<VkShaderModule>			vertShaderModule2		(createShaderModule(vk, vkDevice, context.getBinaryCollection().get("vert2"), 0));
 	const Unique<VkShaderModule>			fragShaderModule2		(createShaderModule(vk, vkDevice, context.getBinaryCollection().get("frag2"), 0));
 
 	// Pipeline
@@ -377,7 +376,7 @@ tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> un
 	const Unique<VkPipeline>				pipeline1				(makeGraphicsPipeline(vk,					// const DeviceInterface&            vk
 																						  vkDevice,				// const VkDevice                    device
 																						  *pipelineLayout,		// const VkPipelineLayout            pipelineLayout
-																						  *vertShaderModule1,	// const VkShaderModule              vertexShaderModule
+																						  *vertShaderModule,	// const VkShaderModule              vertexShaderModule
 																						  DE_NULL,				// const VkShaderModule              tessellationControlModule
 																						  DE_NULL,				// const VkShaderModule              tessellationEvalModule
 																						  DE_NULL,				// const VkShaderModule              geometryShaderModule
@@ -389,7 +388,7 @@ tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> un
 	const Unique<VkPipeline>				pipeline2				(makeGraphicsPipeline(vk,					// const DeviceInterface&            vk
 																						  vkDevice,				// const VkDevice                    device
 																						  *pipelineLayout,		// const VkPipelineLayout            pipelineLayout
-																						  *vertShaderModule2,	// const VkShaderModule              vertexShaderModule
+																						  *vertShaderModule,	// const VkShaderModule              vertexShaderModule
 																						  DE_NULL,				// const VkShaderModule              tessellationControlModule
 																						  DE_NULL,				// const VkShaderModule              tessellationEvalModule
 																						  DE_NULL,				// const VkShaderModule              geometryShaderModule
