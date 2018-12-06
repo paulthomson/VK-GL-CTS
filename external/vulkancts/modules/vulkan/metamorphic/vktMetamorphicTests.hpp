@@ -30,7 +30,7 @@ namespace vkt
 namespace metamorphic
 {
 
-tcu::TestCaseGroup*		createTests		(tcu::TestContext& testCtx);
+tcu::TestCaseGroup* createTests (tcu::TestContext& testCtx);
 
 } // metamorphic
 } // vkt

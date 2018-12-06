@@ -46,27 +46,25 @@ namespace metamorphic
 using namespace vk;
 using de::UniquePtr;
 
-typedef de::SharedPtr<vk::Unique<vk::VkBuffer> > 		VkBufferSp;
-typedef de::SharedPtr<vk::Allocation>					AllocationSp;
+typedef de::SharedPtr<vk::Unique<vk::VkBuffer> >	VkBufferSp;
+typedef de::SharedPtr<vk::Allocation>				AllocationSp;
 
 namespace {
 
-void recordCommandBufferForRenderShaderPair (
-	const DeviceInterface&					vk,
-	const deUint32							queueFamilyIndex,
-	const Unique<VkImage>&					image,
-	const Unique<VkRenderPass>&				renderPass,
-	const tcu::IVec2&						renderSize,
-	const Unique<VkFramebuffer>&			framebuffer,
-	const tcu::Vec4&						clearColor,
-	const Unique<VkPipeline>&				pipeline,
-	const Unique<VkBuffer>&					vertexBuffer,
-	const Unique<VkBuffer>&					readImageBufferReference,
-	const VkDeviceSize						imageSizeBytes,
-	const Unique<VkCommandBuffer>&			cmdBuf,
-	const Unique<VkPipelineLayout>&			pipelineLayout,
-	const Unique<VkDescriptorSet>&			descriptorSet
-)
+void recordCommandBufferForRenderShaderPair (const DeviceInterface&			vk,
+											 const deUint32					queueFamilyIndex,
+											 const Unique<VkImage>&			image,
+											 const Unique<VkRenderPass>&		renderPass,
+											 const tcu::IVec2&					renderSize,
+											 const Unique<VkFramebuffer>&		framebuffer,
+											 const tcu::Vec4&					clearColor,
+											 const Unique<VkPipeline>&			pipeline,
+											 const Unique<VkBuffer>&			vertexBuffer,
+											 const Unique<VkBuffer>&			readImageBufferReference,
+											 const VkDeviceSize				imageSizeBytes,
+											 const Unique<VkCommandBuffer>&	cmdBuf,
+											 const Unique<VkPipelineLayout>&	pipelineLayout,
+											 const Unique<VkDescriptorSet>&	descriptorSet)
 {
 	// Record commands
 	beginCommandBuffer(vk, *cmdBuf);
@@ -81,22 +79,22 @@ void recordCommandBufferForRenderShaderPair (
 			};
 		const VkImageMemoryBarrier	colorAttBarrier		=
 			{
-				VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,		// sType
+				VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,	// sType
 				DE_NULL,									// pNext
-				0u,											// srcAccessMask
+				0u,										// srcAccessMask
 				(VK_ACCESS_COLOR_ATTACHMENT_READ_BIT|
-					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT),		// dstAccessMask
+					VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT),	// dstAccessMask
 				VK_IMAGE_LAYOUT_UNDEFINED,					// oldLayout
 				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,	// newLayout
 				queueFamilyIndex,							// srcQueueFamilyIndex
 				queueFamilyIndex,							// dstQueueFamilyIndex
-				*image,										// image
+				*image,									// image
 				{
-					VK_IMAGE_ASPECT_COLOR_BIT,					// aspectMask
-					0u,											// baseMipLevel
-					1u,											// levelCount
-					0u,											// baseArrayLayer
-					1u,											// layerCount
+					VK_IMAGE_ASPECT_COLOR_BIT,				// aspectMask
+					0u,									// baseMipLevel
+					1u,									// levelCount
+					0u,									// baseArrayLayer
+					1u,									// layerCount
 				}											// subresourceRange
 			};
 		vk.cmdPipelineBarrier(*cmdBuf, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, (VkDependencyFlags)0, 1, &vertFlushBarrier, 0, (const VkBufferMemoryBarrier*)DE_NULL, 1, &colorAttBarrier);
@@ -107,8 +105,8 @@ void recordCommandBufferForRenderShaderPair (
 	vk.cmdBindPipeline(*cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, *pipeline);
 	vk.cmdBindDescriptorSets(*cmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, *pipelineLayout, 0, 1, &descriptorSet.get(), 0, DE_NULL);
 	{
-	const VkDeviceSize bindingOffset = 0;
-	vk.cmdBindVertexBuffers(*cmdBuf, 0u, 1u, &vertexBuffer.get(), &bindingOffset);
+		const VkDeviceSize bindingOffset = 0;
+		vk.cmdBindVertexBuffers(*cmdBuf, 0u, 1u, &vertexBuffer.get(), &bindingOffset);
 	}
 	vk.cmdDraw(*cmdBuf, 6u, 1u, 0u, 0u);
 	endRenderPass(vk, *cmdBuf);
@@ -126,11 +124,11 @@ void recordCommandBufferForRenderShaderPair (
 				queueFamilyIndex,							// dstQueueFamilyIndex
 				*image,										// image
 				{
-					VK_IMAGE_ASPECT_COLOR_BIT,					// aspectMask
-					0u,											// baseMipLevel
-					1u,											// mipLevels
-					0u,											// baseArraySlice
-					1u,											// arraySize
+					VK_IMAGE_ASPECT_COLOR_BIT,				// aspectMask
+					0u,										// baseMipLevel
+					1u,										// mipLevels
+					0u,										// baseArraySlice
+					1u,										// arraySize
 				}											// subresourceRange
 			};
 		vk.cmdPipelineBarrier(*cmdBuf, VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, (VkDependencyFlags)0, 0, (const VkMemoryBarrier*)DE_NULL, 0, (const VkBufferMemoryBarrier*)DE_NULL, 1, &renderFinishBarrier);
@@ -143,10 +141,10 @@ void recordCommandBufferForRenderShaderPair (
 				(deUint32)renderSize.x(),				// bufferRowLength
 				(deUint32)renderSize.y(),				// bufferImageHeight
 				{
-					VK_IMAGE_ASPECT_COLOR_BIT,				// aspectMask
-					0u,										// mipLevel
-					0u,										// baseArrayLayer
-					1u,										// layerCount
+					VK_IMAGE_ASPECT_COLOR_BIT,			// aspectMask
+					0u,									// mipLevel
+					0u,									// baseArrayLayer
+					1u,									// layerCount
 				},										// imageSubresource
 				{ 0u, 0u, 0u },							// imageOffset
 				{
@@ -294,12 +292,12 @@ tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> un
 				{
 						vk::VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
 						DE_NULL,
-						0u,								// flags
+						0u,											// flags
 						(vk::VkDeviceSize)uniformEntries[i].size,	// size
-						VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,	// usage
-						vk::VK_SHARING_MODE_EXCLUSIVE,	// sharingMode
-						0u,								// queueFamilyCount
-						DE_NULL,						// pQueueFamilyIndices
+						VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,			// usage
+						vk::VK_SHARING_MODE_EXCLUSIVE,				// sharingMode
+						0u,											// queueFamilyCount
+						DE_NULL,									// pQueueFamilyIndices
 				};
 
 
@@ -342,11 +340,11 @@ tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> un
 							VK_COMPONENT_SWIZZLE_A
 					},												// components
 					{
-							VK_IMAGE_ASPECT_COLOR_BIT,						// aspectMask
-							0u,												// baseMipLevel
-							1u,												// levelCount
-							0u,												// baseArrayLayer
-							1u,												// layerCount
+							VK_IMAGE_ASPECT_COLOR_BIT,				// aspectMask
+							0u,										// baseMipLevel
+							1u,										// levelCount
+							0u,										// baseArrayLayer
+							1u,										// layerCount
 					},												// subresourceRange
 			};
 	const Unique<VkImageView>				colorAttView			(createImageView(vk, vkDevice, &colorAttViewParams));
@@ -354,13 +352,13 @@ tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> un
 	// Pipeline layout
 	const VkPipelineLayoutCreateInfo		pipelineLayoutParams	=
 			{
-					VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,			// sType
-					DE_NULL,												// pNext
+					VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,		// sType
+					DE_NULL,											// pNext
 					(vk::VkPipelineLayoutCreateFlags)0,
-					1u,														// setLayoutCount
-					&descriptorSetLayout.get(),								// pSetLayouts
-					0u,														// pushConstantRangeCount
-					DE_NULL,												// pPushConstantRanges
+					1u,													// setLayoutCount
+					&descriptorSetLayout.get(),							// pSetLayouts
+					0u,													// pushConstantRangeCount
+					DE_NULL,											// pPushConstantRanges
 			};
 	const Unique<VkPipelineLayout>			pipelineLayout			(createPipelineLayout(vk, vkDevice, &pipelineLayoutParams));
 
@@ -461,26 +459,25 @@ tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> un
 
 	const VkMappedMemoryRange			range1			=
 			{
-					VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,	// sType
-					DE_NULL,								// pNext
-					readImageBufferReferenceMemory1->getMemory(),		// memory
-					0,										// offset
-					imageSizeBytes,							// size
+					VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,			// sType
+					DE_NULL,										// pNext
+					readImageBufferReferenceMemory1->getMemory(),	// memory
+					0,												// offset
+					imageSizeBytes,									// size
 			};
 	const tcu::ConstPixelBufferAccess	resultAccess1	(tcuFormat, renderSize.x(), renderSize.y(), 1, readImageBufferReferenceMemory1->getHostPtr());
 	VK_CHECK(vk.invalidateMappedMemoryRanges(vkDevice, 1u, &range1));
 
 	const VkMappedMemoryRange			range2			=
 		{
-				VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,	// sType
-				DE_NULL,								// pNext
-				readImageBufferReferenceMemory2->getMemory(),		// memory
-				0,										// offset
-				imageSizeBytes,							// size
+				VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,			// sType
+				DE_NULL,										// pNext
+				readImageBufferReferenceMemory2->getMemory(),	// memory
+				0,												// offset
+				imageSizeBytes,									// size
 		};
 	const tcu::ConstPixelBufferAccess	resultAccess2	(tcuFormat, renderSize.x(), renderSize.y(), 1, readImageBufferReferenceMemory2->getHostPtr());
 	VK_CHECK(vk.invalidateMappedMemoryRanges(vkDevice, 1u, &range2));
-
 
 	const tcu::UVec4	threshold		(0u);
 	const tcu::IVec3	posDeviation	(1,1,0);

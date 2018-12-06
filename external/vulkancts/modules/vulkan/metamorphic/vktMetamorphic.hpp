@@ -29,8 +29,8 @@ namespace metamorphic
 {
 
 typedef struct UniformEntry {
-  size_t size;
-  void *value;
+	size_t size;
+	void *value;
 } UniformEntry;
 
 tcu::TestStatus renderShaderPair (Context& context, std::vector<UniformEntry> uniformEntries);
